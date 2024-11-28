@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators'; // Importando o switchMap
+import { switchMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface Dish {
   id: number;
@@ -18,9 +19,9 @@ export interface Dish {
   providedIn: 'root'
 })
 export class DishService {
-  private apiUrl = 'http://localhost:3000/dishes';
-  private cartUrl = 'http://localhost:3000/cart';
-  private ordersUrl = 'http://localhost:3000/orders'; // URL para pedidos
+  private apiUrl = `${environment.apiUrl}/dishes`;
+  private cartUrl = `${environment.apiUrl}/cart`;
+  private ordersUrl = `${environment.apiUrl}/orders`;
 
   constructor(private http: HttpClient) {}
 
@@ -74,5 +75,10 @@ export class DishService {
 
   clearCart(): Observable<void> {
     return this.http.delete<void>(this.cartUrl);
+  }
+
+ 
+  updateOrderStatus(orderId: number, status: string): Observable<Dish> {
+    return this.http.patch<Dish>(`${this.ordersUrl}/${orderId}`, { status });
   }
 }
