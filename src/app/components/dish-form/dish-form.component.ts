@@ -14,7 +14,6 @@ import { RouterModule } from '@angular/router';
 })
 export class DishFormComponent implements OnInit {
   dish: Dish = {
-    id: 0,
     name: '',
     description: '',
     price: 0,
@@ -42,7 +41,7 @@ export class DishFormComponent implements OnInit {
 
   saveDish(): void {
     if (this.isEdit) {
-      this.dishService.updateDish(this.dish.id, this.dish).subscribe(() => {
+      this.dishService.updateDish(this.dish.id!, this.dish).subscribe(() => {
         this.router.navigate(['/']);
       });
     } else {

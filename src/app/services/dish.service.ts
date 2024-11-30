@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface Dish {
-  id: number;
+  id?: number;
   name: string;
   description: string;
   price: number;
@@ -77,7 +77,6 @@ export class DishService {
     return this.http.delete<void>(this.cartUrl);
   }
 
- 
   updateOrderStatus(orderId: number, status: string): Observable<Dish> {
     return this.http.patch<Dish>(`${this.ordersUrl}/${orderId}`, { status });
   }

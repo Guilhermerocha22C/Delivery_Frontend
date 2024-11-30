@@ -27,7 +27,7 @@ export class DishListComponent implements OnInit {
 
   deleteDish(id: number): void {
     this.dishService.deleteDish(id).subscribe(() => {
-      this.dishes = this.dishes.filter(dish => dish.id !== id);
+      this.loadDishes();
     });
   }
 }
