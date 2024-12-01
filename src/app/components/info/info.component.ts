@@ -15,6 +15,6 @@ export class InfoComponent {
   constructor(public router: Router) {}
 
   onSubmit(): void {
-    this.router.navigate(['/sucesso']);
+    this.router.navigate(['/carrinho']); 
   }
 }

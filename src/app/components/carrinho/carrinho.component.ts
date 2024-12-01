@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DishService, Dish } from '../../services/dish.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-carrinho',
@@ -12,7 +13,7 @@ import { DishService, Dish } from '../../services/dish.service';
 export class CarrinhoComponent implements OnInit {
   cartItems: Dish[] = [];
 
-  constructor(private dishService: DishService) {}
+  constructor(private dishService: DishService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadCartItems();
@@ -45,7 +46,7 @@ export class CarrinhoComponent implements OnInit {
   placeOrder(): void {
     this.dishService.moveCartToOrders().subscribe(() => {
       this.cartItems = [];
-      // Adicione aqui a navegação para a página de sucesso, se necessário
+      this.router.navigate(['/sucesso']);
     });
   }
 }

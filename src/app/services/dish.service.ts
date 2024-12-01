@@ -57,8 +57,8 @@ export class DishService {
     return this.http.delete<void>(`${this.cartUrl}/${id}`);
   }
 
-  placeOrder(order: Dish[]): Observable<any> {
-    return this.http.post<Dish[]>(this.ordersUrl, order);
+  placeOrder(cartItems: Dish[]): Observable<any> {
+    return this.http.post<any>(this.ordersUrl, cartItems);
   }
 
   getOrders(): Observable<Dish[]> {
@@ -77,7 +77,11 @@ export class DishService {
     return this.http.delete<void>(this.cartUrl);
   }
 
-  updateOrderStatus(orderId: number, status: string): Observable<Dish> {
-    return this.http.patch<Dish>(`${this.ordersUrl}/${orderId}`, { status });
+  updateOrderStatus(orderId: number, status: string): Observable<string> {
+    return this.http.put<string>(`${this.ordersUrl}/${orderId}/status`, { status }, { responseType: 'text' as 'json' });
+  }
+
+  deleteOrder(orderId: number): Observable<void> {
+    return this.http.delete<void>(`${this.ordersUrl}/${orderId}`);
   }
 }

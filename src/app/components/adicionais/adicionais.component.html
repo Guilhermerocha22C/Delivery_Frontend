@@ -25,5 +25,8 @@
     <button class="quantidade-btn" (click)="updateQuantity(1)">+</button>
     <button class="adicionar-btn" (click)="addToCart()">Adicionar</button>
   </div>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
 </body>
 </html>

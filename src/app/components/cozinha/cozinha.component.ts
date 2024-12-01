@@ -20,23 +20,34 @@ export class CozinhaComponent implements OnInit {
   }
 
   loadOrders(): void {
-    this.dishService.getOrders().subscribe((data: Dish[]) => {
-      this.orders = data;
-      this.orders.forEach(order => {
-        if (order.id !== undefined) {
-          this.selectedStatus[order.id] = order.status || 'STATUS';
-        }
-      });
-    });
+    this.dishService.getOrders().subscribe(
+      (data: Dish[]) => {
+        this.orders = data;
+        this.orders.forEach(order => {
+          if (order.id !== undefined) {
+            this.selectedStatus[order.id] = order.status || 'STATUS';
+          }
+        });
+      },
+      error => {
+        console.error('Erro ao carregar pedidos:', error);
+      }
+    );
   }
 
-  selectStatus(event: Event, orderId: number, status: string): void {
+  selectStatus(event: Event, orderId: number | undefined, status: string): void {
     event.preventDefault();
     if (orderId !== undefined) {
-      this.selectedStatus[orderId] = status;
       this.dishService.updateOrderStatus(orderId, status).subscribe(
-        () => {
-          console.log(`Status do pedido ${orderId} atualizado para ${status}`);
+        (responseStatus: string) => {
+          this.selectedStatus[orderId] = responseStatus;
+          console.log(`Status do pedido ${orderId} atualizado para ${responseStatus}`);
+          
+          // Atualiza o status do pedido na lista de pedidos
+          const updatedOrder = this.orders.find(o => o.id === orderId);
+          if (updatedOrder) {
+            updatedOrder.status = responseStatus;
+          }
         },
         error => {
           console.error('Erro ao atualizar o status:', error);
@@ -46,7 +57,8 @@ export class CozinhaComponent implements OnInit {
     }
   }
 
-  getStatusButtonClass(orderId: number): string {
+  getStatusButtonClass(orderId: number | undefined): string {
+    if (orderId === undefined) return '';
     const status = this.selectedStatus[orderId];
     switch (status) {
       case 'FEITO':
@@ -57,6 +69,24 @@ export class CozinhaComponent implements OnInit {
         return 'entregue';
       default:
         return '';
+    }
+  }
+
+  deleteOrder(orderId: number | undefined): void {
+    if (orderId === undefined) return;
+    if (confirm('Tem certeza que deseja deletar este pedido?')) {
+      console.log(`Tentando deletar pedido ${orderId}`);
+      this.dishService.deleteOrder(orderId).subscribe(
+        () => {
+          console.log(`Pedido ${orderId} deletado com sucesso`);
+          this.orders = this.orders.filter(order => order.id !== orderId);
+        },
+        error => {
+          console.error('Erro ao deletar o pedido:', error);
+          console.error('URL da requisição:', error.url);
+          console.error('Mensagem de erro:', error.message);
+        }
+      );
     }
   }
 }

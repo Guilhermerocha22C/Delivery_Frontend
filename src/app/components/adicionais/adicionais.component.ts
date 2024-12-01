@@ -44,7 +44,6 @@ export class AdicionaisComponent implements OnInit {
           console.error('Erro ao obter prato:', error);
           this.errorMessage = 'Não foi possível carregar o prato. Por favor, tente novamente.';
           this.isLoading = false;
-          // Você pode adicionar um timeout para redirecionar após alguns segundos
           setTimeout(() => this.router.navigate(['']), 3000);
         }
       });
@@ -58,7 +57,7 @@ export class AdicionaisComponent implements OnInit {
 
   updateQuantity(amount: number): void {
     const newQuantity = this.quantidade + amount;
-    if (newQuantity > 0 && newQuantity <= 10) { // Adicionando um limite máximo
+    if (newQuantity > 0 && newQuantity <= 10) {
       this.quantidade = newQuantity;
     }
   }
@@ -76,11 +75,17 @@ export class AdicionaisComponent implements OnInit {
       this.dishService.addToCart(cartItem).subscribe({
         next: (response) => {
           console.log('Item adicionado ao carrinho:', response);
-          this.router.navigate(['/carrinho']);
+          this.router.navigate(['/info']); // Alterado para navegar para /info
         },
         error: (error) => {
           console.error('Erro ao adicionar ao carrinho:', error);
-          this.errorMessage = 'Erro ao adicionar ao carrinho. Por favor, tente novamente.';
+          if (error.status === 405) {
+            this.errorMessage = 'Método não permitido. Verifique a configuração da API.';
+          } else if (error.status === 0) {
+            this.errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
+          } else {
+            this.errorMessage = 'Erro ao adicionar ao carrinho. Por favor, tente novamente.';
+          }
           this.isLoading = false;
         }
       });
