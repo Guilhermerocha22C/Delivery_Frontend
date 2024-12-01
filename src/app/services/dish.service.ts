@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { Order } from '../models/order.model';
 
 export interface Dish {
   id?: number;
@@ -12,7 +13,6 @@ export interface Dish {
   image: string;
   quantity?: number;
   observacao?: string;
-  status?: string;
 }
 
 @Injectable({
@@ -61,8 +61,8 @@ export class DishService {
     return this.http.post<any>(this.ordersUrl, cartItems);
   }
 
-  getOrders(): Observable<Dish[]> {
-    return this.http.get<Dish[]>(this.ordersUrl);
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(this.ordersUrl);
   }
 
   moveCartToOrders(): Observable<any> {

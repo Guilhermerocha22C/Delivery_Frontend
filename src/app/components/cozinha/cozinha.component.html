@@ -17,11 +17,14 @@
       <div *ngFor="let order of orders" class="pedido">
         <h2 class="pedido-id">Pedido #{{ order.id }}</h2>
         <div class="pedido-content">
-          <p class="item-nome">
-            {{ order.name }}
-            <span class="item-quantidade">{{ order.quantity }}x</span>
-          </p>
-          <p class="item-descricao">{{ order.description }}</p>
+          <div *ngFor="let item of order.items" class="item">
+            <p class="item-nome">
+              {{ item.name }}
+              <span class="item-quantidade">{{ item.quantity }}x</span>
+            </p>
+            <p class="item-descricao">{{ item.description }}</p>
+            <p *ngIf="item.observacao" class="item-observacao">Observação: {{ item.observacao }}</p>
+          </div>
           <div class="pedido-actions">
             <div class="status-dropdown">
               <button class="status-button" 

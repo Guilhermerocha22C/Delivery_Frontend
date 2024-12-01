@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DishService, Dish } from '../../services/dish.service';
+import { DishService } from '../../services/dish.service';
+import { Order } from '../../models/order.model';
 
 @Component({
   selector: 'app-cozinha',
@@ -10,7 +11,7 @@ import { DishService, Dish } from '../../services/dish.service';
   imports: [CommonModule]
 })
 export class CozinhaComponent implements OnInit {
-  orders: Dish[] = [];
+  orders: Order[] = [];
   selectedStatus: { [key: number]: string } = {};
 
   constructor(private dishService: DishService) {}
@@ -21,11 +22,11 @@ export class CozinhaComponent implements OnInit {
 
   loadOrders(): void {
     this.dishService.getOrders().subscribe(
-      (data: Dish[]) => {
+      (data: Order[]) => {
         this.orders = data;
         this.orders.forEach(order => {
           if (order.id !== undefined) {
-            this.selectedStatus[order.id] = order.status || 'STATUS';
+            this.selectedStatus[order.id] = order.status;
           }
         });
       },
